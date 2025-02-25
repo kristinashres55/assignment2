@@ -132,17 +132,10 @@ const PropertyForm = ({ onPredict, disabled }) => {
     onPredict(normalizedInput);
 
     // Reset the form fields
-    setFormData({
-      area: "",
-      bedrooms: "",
-      bathrooms: "",
-      location: "",
-      age: "",
-    });
   };
 
   return (
-    <div className="container mx-auto p-6 bg-white shadow-md rounded-md max-w-lg">
+    <div className="container mx-auto p-6 bg-white shadow-lg rounded-md max-w-lg">
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Area */}
         <div className="relative">

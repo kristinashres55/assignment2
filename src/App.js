@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
 import PropertyForm from "./components/PropertyForm";
+import PriceChart from "./components/PriceChart";
 import trainModel from "./components/trainModel";
+import dataset from "./createDataset.json"; // Import dataset for actual prices
 
 const App = () => {
-  const [net, setNet] = useState(null); // Store the trained neural network
-  const [predictedPrice, setPredictedPrice] = useState(null); // Store the predicted price
-  const [isModelLoading, setIsModelLoading] = useState(true); // Track model loading state
-  const [error, setError] = useState(null); // Handle errors during model training
+  const [net, setNet] = useState(null);
+  const [predictedPrice, setPredictedPrice] = useState(null);
+  const [datasetWithPredictions, setDatasetWithPredictions] = useState([]);
+  const [isModelLoading, setIsModelLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const loadModel = async () => {
       try {
-        const trainedNet = await trainModel(); // Train the model
-        setNet(trainedNet); // Set the trained model
+        const trainedNet = await trainModel();
+        setNet(trainedNet);
         setIsModelLoading(false);
       } catch (err) {
         console.error("Error loading the model:", err);
@@ -23,14 +26,12 @@ const App = () => {
     loadModel();
   }, []);
 
-  // Handle prediction from PropertyForm
   const handlePrediction = (formData) => {
     if (!net) {
       console.error("Model is not loaded yet.");
       return;
     }
 
-    // Prepare input for the neural network
     const input = {
       area: parseFloat(formData.area),
       bedrooms: parseFloat(formData.bedrooms),
@@ -40,7 +41,38 @@ const App = () => {
     };
 
     const output = net.run(input);
-    setPredictedPrice(output.price);
+    const predictedPrice = output.price;
+
+    setPredictedPrice(predictedPrice);
+
+    // Find the closest actual price from the dataset based on input similarity
+    const closestMatch = dataset.reduce((prev, curr) => {
+      const prevDiff =
+        Math.abs(prev.area - input.area) +
+        Math.abs(prev.bedrooms - input.bedrooms) +
+        Math.abs(prev.bathrooms - input.bathrooms) +
+        Math.abs(prev.location - input.location) +
+        Math.abs(prev.age - input.age);
+
+      const currDiff =
+        Math.abs(curr.area - input.area) +
+        Math.abs(curr.bedrooms - input.bedrooms) +
+        Math.abs(curr.bathrooms - input.bathrooms) +
+        Math.abs(curr.location - input.location) +
+        Math.abs(curr.age - input.age);
+
+      return currDiff < prevDiff ? curr : prev;
+    });
+
+    // Update dataset with actual and predicted prices
+    setDatasetWithPredictions((prevDataset) => [
+      ...prevDataset,
+      {
+        ...input,
+        price: closestMatch.price, // Actual price
+        predictedPrice, // Predicted price
+      },
+    ]);
   };
 
   return (
@@ -70,6 +102,10 @@ const App = () => {
             <strong>USD {(predictedPrice * 1000000).toFixed(2)}</strong>
           </p>
         </div>
+      )}
+
+      {datasetWithPredictions.length > 0 && (
+        <PriceChart dataset={datasetWithPredictions} />
       )}
     </div>
   );
