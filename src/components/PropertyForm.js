@@ -31,6 +31,60 @@ const PropertyForm = ({ onPredict, disabled }) => {
     return (value - min) / (max - min);
   };
 
+  const validateInputs = () => {
+    const newErrors = {};
+
+    if (!formData.area || isNaN(formData.area)) {
+      newErrors.area = "Area is required and must be a number.";
+    } else if (
+      formData.area < minMaxValues.area.min ||
+      formData.area > minMaxValues.area.max
+    ) {
+      newErrors.area = `Area must be between ${minMaxValues.area.min} and ${minMaxValues.area.max}.`;
+    }
+
+    if (!formData.bedrooms || isNaN(formData.bedrooms)) {
+      newErrors.bedrooms = "Bedrooms is required and must be a number.";
+    } else if (
+      formData.bedrooms < minMaxValues.bedrooms.min ||
+      formData.bedrooms > minMaxValues.bedrooms.max
+    ) {
+      newErrors.bedrooms = `Bedrooms must be between ${minMaxValues.bedrooms.min} and ${minMaxValues.bedrooms.max}.`;
+    }
+
+    if (!formData.bathrooms || isNaN(formData.bathrooms)) {
+      newErrors.bathrooms = "Bathrooms is required and must be a number.";
+    } else if (
+      formData.bathrooms < minMaxValues.bathrooms.min ||
+      formData.bathrooms > minMaxValues.bathrooms.max
+    ) {
+      newErrors.bathrooms = `Bathrooms must be between ${minMaxValues.bathrooms.min} and ${minMaxValues.bathrooms.max}.`;
+    }
+
+    // Validate location
+    if (!formData.location) {
+      newErrors.location = "Location is required.";
+    } else if (
+      formData.location < minMaxValues.location.min ||
+      formData.location > minMaxValues.location.max
+    ) {
+      newErrors.location = `Location must be between ${minMaxValues.location.min} and ${minMaxValues.location.max}.`;
+    }
+
+    // Validate age
+    if (!formData.age || isNaN(formData.age)) {
+      newErrors.age = "Age is required and must be a number.";
+    } else if (
+      formData.age < minMaxValues.age.min ||
+      formData.age > minMaxValues.age.max
+    ) {
+      newErrors.age = `Age must be between ${minMaxValues.age.min} and ${minMaxValues.age.max}.`;
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Return true if no errors
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
