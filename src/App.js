@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
-import PropertyForm from "./components/PropertyForm";
+import PropertyForm from "./components/PropertyForm/PropertyForm";
 import PriceChart from "./components/PriceChart";
-import trainModel from "./components/trainModel";
-import dataset from "./createDataset.json"; // Import dataset for actual prices
+import {
+  trainModel,
+  saveModelToLocalStorage,
+  loadModelFromLocalStorage,
+} from "./components/trainModel";
+import dataset from "./dataset.json";
 import Home from "./components/Home/Home";
 import Navbar from "./components/Navigation/Navbar";
 
@@ -16,7 +20,10 @@ const App = () => {
   useEffect(() => {
     const loadModel = async () => {
       try {
-        const trainedNet = await trainModel();
+        let trainedNet = loadModelFromLocalStorage(); // Try to load the model from LocalStorage
+        if (!trainedNet) {
+          trainedNet = await trainModel(); // If no model in LocalStorage, train a new model
+        }
         setNet(trainedNet);
         setIsModelLoading(false);
       } catch (err) {
@@ -77,6 +84,23 @@ const App = () => {
     ]);
   };
 
+  const handleSaveModel = () => {
+    if (net) {
+      saveModelToLocalStorage(net); // Save the trained model to LocalStorage
+      alert("Model saved to LocalStorage.");
+    }
+  };
+
+  const handleLoadModel = () => {
+    const loadedNet = loadModelFromLocalStorage(); // Load the model from LocalStorage
+    if (loadedNet) {
+      setNet(loadedNet);
+      alert("Model loaded from LocalStorage.");
+    } else {
+      alert("No model found in LocalStorage.");
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -109,7 +133,18 @@ const App = () => {
             </p>
           </div>
         )}
+
+        {/* Buttons for saving and loading model */}
+        <div className="mt-4 text-center">
+          <button onClick={handleSaveModel} className="btn btn-success mx-2">
+            Save Model
+          </button>
+          <button onClick={handleLoadModel} className="btn btn-primary mx-2">
+            Load Model
+          </button>
+        </div>
       </div>
+
       {datasetWithPredictions.length > 0 && (
         <div className="mt-4 w-50 mx-auto ">
           <PriceChart dataset={datasetWithPredictions} />
