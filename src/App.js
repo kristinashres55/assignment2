@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropertyForm from "./components/PropertyForm/PropertyForm";
 import PriceChart from "./components/PriceChart";
 import {
@@ -14,30 +14,34 @@ const App = () => {
   const [net, setNet] = useState(null);
   const [predictedPrice, setPredictedPrice] = useState(null);
   const [datasetWithPredictions, setDatasetWithPredictions] = useState([]);
-  const [isModelLoading, setIsModelLoading] = useState(true);
+  const [isModelLoading, setIsModelLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const loadModel = async () => {
-      try {
-        let trainedNet = loadModelFromLocalStorage(); // Try to load the model from LocalStorage
-        if (!trainedNet) {
-          trainedNet = await trainModel(); // If no model in LocalStorage, train a new model
-        }
-        setNet(trainedNet);
-        setIsModelLoading(false);
-      } catch (err) {
-        console.error("Error loading the model:", err);
-        setError("Failed to load the model. Please try again later.");
-        setIsModelLoading(false);
-      }
-    };
-    loadModel();
-  }, []);
+  const trainAndSetModel = async () => {
+    setIsModelLoading(true);
+    setError(null); // Clear previous errors
+    try {
+      const trainedNet = await trainModel();
+      setNet(trainedNet);
+      setIsModelLoading(false);
+      return trainedNet;
+    } catch (err) {
+      console.error("Error training the model:", err);
+      setError("Failed to train the model. Please try again.");
+      setIsModelLoading(false);
+      return null;
+    }
+  };
 
-  const handlePrediction = (formData) => {
-    if (!net) {
-      console.error("Model is not loaded yet.");
+  const handlePrediction = async (formData) => {
+    let model = net;
+
+    if (!model) {
+      model = await trainAndSetModel(); // Train if no model is available
+    }
+
+    if (!model) {
+      alert("Error: Model training failed. Cannot make predictions.");
       return;
     }
 
@@ -49,7 +53,7 @@ const App = () => {
       age: parseFloat(formData.age),
     };
 
-    const output = net.run(input);
+    const output = model.run(input);
     const predictedPrice = output.price;
 
     setPredictedPrice(predictedPrice);
@@ -73,7 +77,6 @@ const App = () => {
       return currDiff < prevDiff ? curr : prev;
     });
 
-    // Update dataset with actual and predicted prices
     setDatasetWithPredictions((prevDataset) => [
       ...prevDataset,
       {
@@ -86,13 +89,13 @@ const App = () => {
 
   const handleSaveModel = () => {
     if (net) {
-      saveModelToLocalStorage(net); // Save the trained model to LocalStorage
+      saveModelToLocalStorage(net);
       alert("Model saved to LocalStorage.");
     }
   };
 
   const handleLoadModel = () => {
-    const loadedNet = loadModelFromLocalStorage(); // Load the model from LocalStorage
+    const loadedNet = loadModelFromLocalStorage();
     if (loadedNet) {
       setNet(loadedNet);
       alert("Model loaded from LocalStorage.");
@@ -108,7 +111,7 @@ const App = () => {
       <div className="container w-50 max-w-xs mx-auto p-4 shadow-lg rounded-lg bg-white mt-lg-5">
         {isModelLoading && (
           <div className="p-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700 text-sm">
-            <p>Loading model...</p>
+            <p>Training model...</p>
           </div>
         )}
         {error && (
@@ -129,12 +132,18 @@ const App = () => {
           >
             <p>
               Predicted Price:{" "}
-              <strong>USD {(predictedPrice * 1000000).toFixed(2)}</strong>
+              <strong>
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(predictedPrice * 100000)}
+              </strong>
             </p>
           </div>
         )}
 
-        {/* Buttons for saving and loading model */}
         <div className="mt-4 text-center">
           <button onClick={handleSaveModel} className="btn btn-success mx-2">
             Save Model
