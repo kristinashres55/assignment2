@@ -80,4 +80,4 @@ const trainModel = async () => {
   }
 };
 
-export default trainModel;
+export { trainModel, saveModelToLocalStorage, loadModelFromLocalStorage };
