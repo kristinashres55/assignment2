@@ -3,6 +3,8 @@ import PropertyForm from "./components/PropertyForm";
 import PriceChart from "./components/PriceChart";
 import trainModel from "./components/trainModel";
 import dataset from "./createDataset.json"; // Import dataset for actual prices
+import Home from "./components/Home/Home";
+import Navbar from "./components/Navigation/Navbar";
 
 const App = () => {
   const [net, setNet] = useState(null);
@@ -76,36 +78,42 @@ const App = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Property Price Predictor</h1>
+    <div>
+      <Navbar />
+      <Home />
+      <div className="container w-50 max-w-xs mx-auto p-4 shadow-lg rounded-lg bg-white mt-lg-5">
+        {isModelLoading && (
+          <div className="p-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700 text-sm">
+            <p>Loading model...</p>
+          </div>
+        )}
+        {error && (
+          <div className="p-4 bg-red-100 border-l-4 border-red-500 text-red-700 text-sm">
+            <p>{error}</p>
+          </div>
+        )}
 
-      {isModelLoading && (
-        <div className="p-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700">
-          <p>Loading model...</p>
-        </div>
-      )}
-      {error && (
-        <div className="p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
-          <p>{error}</p>
-        </div>
-      )}
+        <PropertyForm
+          onPredict={handlePrediction}
+          disabled={isModelLoading || !!error}
+        />
 
-      <PropertyForm
-        onPredict={handlePrediction}
-        disabled={isModelLoading || !!error}
-      />
-
-      {predictedPrice !== null && (
-        <div className="mt-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
-          <p>
-            Predicted Price:{" "}
-            <strong>USD {(predictedPrice * 1000000).toFixed(2)}</strong>
-          </p>
-        </div>
-      )}
-
+        {predictedPrice !== null && (
+          <div
+            className="p-2 w-50 mx-auto text-sm text-center"
+            style={{ border: "2px solid green" }}
+          >
+            <p>
+              Predicted Price:{" "}
+              <strong>USD {(predictedPrice * 1000000).toFixed(2)}</strong>
+            </p>
+          </div>
+        )}
+      </div>
       {datasetWithPredictions.length > 0 && (
-        <PriceChart dataset={datasetWithPredictions} />
+        <div className="mt-4 w-50 mx-auto ">
+          <PriceChart dataset={datasetWithPredictions} />
+        </div>
       )}
     </div>
   );
