@@ -4,6 +4,10 @@ import "chart.js/auto";
 
 const PriceChart = ({ dataset }) => {
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
+  const [featureImportance, setFeatureImportance] = useState({
+    labels: [],
+    datasets: [],
+  });
 
   useEffect(() => {
     if (dataset.length > 0) {
@@ -43,13 +47,33 @@ const PriceChart = ({ dataset }) => {
         },
         { area: 0, bedrooms: 0, bathrooms: 0, location: 0, age: 0 }
       );
+
+      setFeatureImportance({
+        labels: ["Area", "Bedrooms", "Bathrooms", "Location", "Age"],
+        datasets: [
+          {
+            label: "Feature Importance",
+            data: Object.values(featureSums),
+            backgroundColor: [
+              "#FF6384",
+              "#36A2EB",
+              "#FFCE56",
+              "#4BC0C0",
+              "#9966FF",
+            ],
+          },
+        ],
+      });
     }
   }, [dataset]);
 
   return (
     <div className="mt-6 p-4 bg-white shadow-lg rounded-lg">
-      <h2 className="text-xl font-bold mb-3">Predicted vs. Actual Prices</h2>
+      <h2 className="text-xl font-bold mb-3">Chart</h2>
       <Line data={chartData} />
+
+      <h2 className="text-xl font-bold mt-3 mb-3">Feature Importance</h2>
+      <Bar data={featureImportance} />
     </div>
   );
 };
