@@ -1,7 +1,7 @@
 [build]
   base = "/"
   publish = "build"
-  command = "npm run build"
+  command = "npm install --no-optional && npm run build"
 
 [build.environment]
   NODE_VERSION = "18" # Specify the Node.js version
