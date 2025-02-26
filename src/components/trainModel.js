@@ -1,4 +1,5 @@
 import * as brain from "brain.js";
+import dataset from "../dataset.json"; // Import dataset directly from src
 
 // Function to save the trained model to LocalStorage
 const saveModelToLocalStorage = (net) => {
@@ -8,6 +9,7 @@ const saveModelToLocalStorage = (net) => {
     console.log("Model successfully saved to LocalStorage!");
   } catch (error) {
     console.error("Error saving model to LocalStorage:", error);
+    throw new Error("Failed to save model to LocalStorage");
   }
 };
 
@@ -23,10 +25,12 @@ const loadModelFromLocalStorage = () => {
     }
   } catch (error) {
     console.error("Error loading model from LocalStorage:", error);
+    throw new Error("Failed to load model from LocalStorage");
   }
   return null;
 };
 
+// Function to train a new model
 const trainModel = async () => {
   // Check if a trained model exists in LocalStorage
   let net = loadModelFromLocalStorage();
@@ -41,12 +45,10 @@ const trainModel = async () => {
   net = new brain.NeuralNetwork();
 
   try {
-    // Fetch the dataset from dataset.json
-    const response = await fetch("/dataset.json");
-    if (!response.ok) {
-      throw new Error("Failed to fetch dataset");
+    // Use the imported dataset directly
+    if (!Array.isArray(dataset) || dataset.length === 0) {
+      throw new Error("Dataset is empty or invalid");
     }
-    const dataset = await response.json();
 
     // Prepare training data
     const trainingData = dataset.map((item) => ({
@@ -54,10 +56,10 @@ const trainModel = async () => {
         area: item.area,
         bedrooms: item.bedrooms,
         bathrooms: item.bathrooms,
-        location: item.Location, // Use encoded location value
+        location: item.location, // Ensure lowercase 'location'
         age: item.age,
       },
-      output: { price: item.price }, // Price is normalized
+      output: { price: item.price },
     }));
 
     // Train the model
@@ -65,7 +67,7 @@ const trainModel = async () => {
       iterations: 2000,
       learningRate: 0.01,
       errorThresh: 0.005,
-      log: (details) => console.log(details), // Log training progress
+      // log: (details) => console.log(details), // Enable/disable logging as needed
     });
 
     console.log("Model trained successfully!");
@@ -75,8 +77,8 @@ const trainModel = async () => {
 
     return net;
   } catch (error) {
-    console.error("Error loading or training the model:", error);
-    throw error;
+    console.error("Error training the model:", error);
+    throw new Error("Failed to train the model");
   }
 };
 
