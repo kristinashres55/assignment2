@@ -1,0 +1,16 @@
+.property-form-container {
+  /* background-image: url("your-background-image-url.jpg"); Replace with your background image URL */
+  background-size: cover;
+  background-position: center;
+  padding: 20px;
+}
+
+.property-form {
+  background-color: rgba(255, 255, 255, 0.8); /* Transparent background */
+  padding: 30px;
+  border-radius: 8px;
+}
+
+.property-form-btn {
+  font-size: 18px; /* You can adjust button font size if needed */
+}
