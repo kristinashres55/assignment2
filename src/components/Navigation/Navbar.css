@@ -63,3 +63,31 @@
   text-decoration: underline;
   color: #676a81;
 }
+
+@media (max-width: 750px) {
+  .navbar {
+    padding: 20px 50px;
+  }
+
+  .logo h1 {
+    font-size: 20px;
+  }
+
+  .nav-menu ul li {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 500px) {
+  .navbar {
+    padding: 20px 20px;
+  }
+
+  .logo h1 {
+    font-size: 16px;
+  }
+
+  .nav-menu ul li {
+    font-size: 14px;
+  }
+}

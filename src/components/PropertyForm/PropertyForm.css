@@ -1,16 +1,50 @@
 .property-form-container {
-  /* background-image: url("your-background-image-url.jpg"); Replace with your background image URL */
   background-size: cover;
   background-position: center;
   padding: 20px;
 }
 
+.property-form-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 .property-form {
-  background-color: rgba(255, 255, 255, 0.8); /* Transparent background */
+  background-color: rgba(255, 255, 255, 0.8);
   padding: 30px;
   border-radius: 8px;
 }
 
 .property-form-btn {
-  font-size: 18px; /* You can adjust button font size if needed */
+  font-size: 18px;
+}
+
+@media (max-width: 800px) {
+  .property-container {
+    max-width: 100%;
+    margin: 0px;
+  }
+
+  .property-form-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 500px) {
+  .property-container {
+    max-width: 100%;
+    margin: 0px;
+  }
+
+  .property-form-title {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+  }
 }

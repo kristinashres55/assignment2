@@ -129,10 +129,8 @@ const PropertyForm = ({ onPredict, disabled }) => {
   };
 
   return (
-    <div className="container my-5">
-      <h1 className="text-xl font-bold mb-4 text-center display-4 display-md-3">
-        Property Price Predictor
-      </h1>
+    <div className="container">
+      <h1 className="property-form-title">Property Price Predictor</h1>
       <Form onSubmit={handleSubmit}>
         <Row>
           {/* Area */}

@@ -36,3 +36,38 @@
     transform: rotate(360deg);
   }
 }
+.container {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 0.5rem;
+  background-color: white;
+  margin-top: 3rem;
+}
+
+.predicted-price {
+  border: 2px solid green;
+  padding: 1rem;
+  text-align: center;
+  width: fit-content;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+}
+
+.price-chart-container {
+  margin-top: 16px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 992px) {
+  .custom-container {
+    margin-top: 5rem; /* mt-lg-5 */
+  }
+}

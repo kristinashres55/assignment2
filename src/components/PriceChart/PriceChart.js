@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Line, Bar } from "react-chartjs-2";
 import "chart.js/auto";
+import "./PriceChart.css";
 
 const PriceChart = ({ dataset }) => {
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
@@ -22,13 +23,13 @@ const PriceChart = ({ dataset }) => {
         labels,
         datasets: [
           {
-            label: "Actual Price",
+            label: "Actual Price (USD)",
             data: actualPrices,
             borderColor: "#FF6384",
             fill: false,
           },
           {
-            label: "Predicted Price",
+            label: "Predicted Price (USD)",
             data: predictedPrices,
             borderColor: "#36A2EB",
             fill: false,
@@ -92,11 +93,11 @@ const PriceChart = ({ dataset }) => {
   };
 
   return (
-    <div className="mt-6 p-4 bg-white shadow-lg rounded-lg">
-      <h2 className="text-xl font-bold mb-3">Actual vs. Predicted Prices</h2>
+    <div className="price-chart">
+      <h2 className="chart-title">Actual vs. Predicted Prices</h2>
       <Line data={chartData} />
 
-      <h2 className="text-xl font-bold mt-6 mb-3">Feature Importance</h2>
+      <h2 className="chart-title">Feature Importance</h2>
       <Bar
         data={featureImportance}
         options={{

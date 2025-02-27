@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropertyForm from "./components/PropertyForm/PropertyForm";
-import PriceChart from "./components/PriceChart";
+import PriceChart from "./components/PriceChart/PriceChart";
 import {
   trainModel,
   saveModelToLocalStorage,
@@ -9,6 +9,7 @@ import {
 import dataset from "./dataset.json";
 import Home from "./components/Home/Home";
 import Navbar from "./components/Navigation/Navbar";
+import "./App.css";
 
 const App = () => {
   const [net, setNet] = useState(null);
@@ -108,7 +109,7 @@ const App = () => {
     <div>
       <Navbar />
       <Home />
-      <div className="container w-50 max-w-xs mx-auto p-4 shadow-lg rounded-lg bg-white mt-lg-5">
+      <div className="property-container">
         {isModelLoading && (
           <div className="p-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700 text-sm">
             <p>Training model...</p>
@@ -127,10 +128,10 @@ const App = () => {
 
         {predictedPrice !== null && (
           <div
-            className="p-2 w-50 mx-auto text-sm text-center"
+            className="predicted-price mt-3"
             style={{ border: "2px solid green" }}
           >
-            <p>
+            <p style={{ margin: 0 }}>
               Predicted Price:{" "}
               <strong>
                 {new Intl.NumberFormat("en-US", {
@@ -138,7 +139,7 @@ const App = () => {
                   currency: "USD",
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
-                }).format(predictedPrice * 100000)}
+                }).format(predictedPrice * 1000000)}
               </strong>
             </p>
           </div>
@@ -155,7 +156,7 @@ const App = () => {
       </div>
 
       {datasetWithPredictions.length > 0 && (
-        <div className="mt-4 w-50 mx-auto ">
+        <div className="price-chart-container">
           <PriceChart dataset={datasetWithPredictions} />
         </div>
       )}
