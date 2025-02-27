@@ -1,70 +1,119 @@
-# Getting Started with Create React App
+# Property Price Prediction App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 📌 Project Overview
 
-## Available Scripts
+The **Property Price Prediction App** leverages a neural network model (powered by `brain.js`) to predict property prices based on key features such as area, number of bedrooms and bathrooms, location, and age. It includes interactive data visualizations for comparing predicted and actual prices and analyzing feature importance.
 
-In the project directory, you can run:
+## ✨ Key Features
 
-### `npm start`
+### 🏡 Price Prediction
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Predict property prices using a trained neural network model.
+- Input property details and receive an estimated price instantly.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 📊 Data Visualization
 
-### `npm test`
+- **Line Chart**: Compare predicted vs. actual prices.
+- **Bar Chart**: Analyze feature importance.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 🛠️ Model Management
 
-### `npm run build`
+- **Save & Load**: Store the trained model in LocalStorage.
+- **Retrain Model**: Easily retrain the model if needed.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🚀 How to Run Locally
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Prerequisites
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Node.js** (v16 or higher)
+- **npm** (v8 or higher)
 
-### `npm run eject`
+### Installation & Setup
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/kristinashres55/CSDD1008_Assignment2
+   cd CSDD1008_Assignment2
+   ```
+2. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+3. **Run the App**:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   ```bash
+   npm start
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   The app will start on **http://localhost:3000**.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+4. **Train the Model**:
 
-## Learn More
+   - The model is trained automatically on the first run.
+   - You can retrain the model anytime by clicking the **"Retrain Model"** button.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+5. **Make Predictions**:
+   - Enter property details (area, bedrooms, bathrooms, location, age).
+   - Click **"Predict Price"** to get an estimated price.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 📂 Folder Structure
 
-### Code Splitting
+```
+ASSIGNMENT2/
+│── build/                  # Production build files
+│── node_modules/           # Dependencies (auto-generated)
+│── public/                 # Static assets (favicon, index.html, etc.)
+│── src/                    # Source code
+│   ├── assets/             # Images and other assets
+│   ├── components/         # Reusable React components
+│   ├── App.js              # Main application component
+│   ├── App.css             # Global styles
+│   ├── App.test.js         # Test file for App.js
+│   ├── createDataset.json  # Dataset creation file
+│   ├── dataset.json        # Sample dataset
+│   ├── index.css           # Additional styles
+│   ├── index.js            # Entry point of the app
+│   ├── logo.svg            # Application logo
+│   ├── reportWebVitals.js  # Performance measuring tool
+│   ├── setupTests.js       # Test setup file
+│── .gitignore              # Files to ignore in Git
+│── netlify.toml            # Netlify deployment configuration
+│── package-lock.json       # Lock file for dependencies
+│── package.json            # Project metadata and dependencies
+│── README.md               # Project documentation
+│── transformDataset.js     # Data transformation script
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```
 
-### Analyzing the Bundle Size
+## 🛠️ Technologies Used
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### 🔹 Frontend
 
-### Making a Progressive Web App
+- **React.js** (component-based UI development)
+- **Chart.js** (data visualization)
+- **Tailwind CSS** (modern and responsive styling)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### 🔹 Machine Learning
 
-### Advanced Configuration
+- **brain.js** (lightweight neural network library)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### 🔹 Build Tool
 
-### Deployment
+- **Netlify** (optimized development and production builds)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 📩 Contact
 
-### `npm run build` fails to minify
+For questions or feedback, feel free to reach out:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **Email**: kristinashrestha2055@gmail.com
+- **GitHub**: [kristinashres55](https://github.com/kristinashres55)
+
+---
+
+### Conclusion
+
+1. **Price Prediction Form** – Users input property details.
+2. **Predicted vs. Actual Prices Chart** – Line chart comparing predictions with actual values.
+3. **Feature Importance Chart** – Bar chart highlighting key predictive factors.
+
+---

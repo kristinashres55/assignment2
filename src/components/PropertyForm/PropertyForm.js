@@ -130,133 +130,154 @@ const PropertyForm = ({ onPredict, disabled }) => {
 
   return (
     <div className="container my-5">
-      <h1 className="text-xl font-bold mb-4 text-center">
+      <h1 className="text-xl font-bold mb-4 text-center display-4 display-md-3">
         Property Price Predictor
       </h1>
       <Form onSubmit={handleSubmit}>
-        {/* Area */}
-        <Form.Group controlId="area">
-          <Form.Label>Area (sq ft)</Form.Label>
-          <InputGroup>
-            <Form.Control
-              type="number"
-              name="area"
-              value={formData.area}
-              onChange={handleChange}
-              isInvalid={!!errors.area}
-              disabled={disabled}
-            />
-            <InputGroup.Text>
-              <FaHome />
-            </InputGroup.Text>
-          </InputGroup>
-          {errors.area && (
-            <Form.Control.Feedback type="invalid" className="d-block">
-              {errors.area}
-            </Form.Control.Feedback>
-          )}
-        </Form.Group>
+        <Row>
+          {/* Area */}
+          <Col md={6} sm={12}>
+            <Form.Group controlId="area" className="mb-3">
+              <Form.Label>Area (sq ft)</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type="number"
+                  name="area"
+                  value={formData.area}
+                  onChange={handleChange}
+                  isInvalid={!!errors.area}
+                  disabled={disabled}
+                />
+                <InputGroup.Text>
+                  <FaHome />
+                </InputGroup.Text>
+              </InputGroup>
+              {errors.area && (
+                <Form.Control.Feedback type="invalid" className="d-block">
+                  {errors.area}
+                </Form.Control.Feedback>
+              )}
+            </Form.Group>
+          </Col>
 
-        {/* Bedrooms */}
-        <Form.Group controlId="bedrooms">
-          <Form.Label>Bedrooms</Form.Label>
-          <InputGroup>
-            <Form.Control
-              type="number"
-              name="bedrooms"
-              value={formData.bedrooms}
-              onChange={handleChange}
-              isInvalid={!!errors.bedrooms}
-              disabled={disabled}
-            />
-            <InputGroup.Text>
-              <FaBed />
-            </InputGroup.Text>
-          </InputGroup>
-          {/* ✅ Moved outside InputGroup */}
-          {errors.bedrooms && (
-            <Form.Control.Feedback type="invalid" className="d-block">
-              {errors.bedrooms}
-            </Form.Control.Feedback>
-          )}
-        </Form.Group>
+          {/* Bedrooms */}
+          <Col md={6} sm={12}>
+            <Form.Group controlId="bedrooms" className="mb-3">
+              <Form.Label>Bedrooms</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type="number"
+                  name="bedrooms"
+                  value={formData.bedrooms}
+                  onChange={handleChange}
+                  isInvalid={!!errors.bedrooms}
+                  disabled={disabled}
+                />
+                <InputGroup.Text>
+                  <FaBed />
+                </InputGroup.Text>
+              </InputGroup>
+              {errors.bedrooms && (
+                <Form.Control.Feedback type="invalid" className="d-block">
+                  {errors.bedrooms}
+                </Form.Control.Feedback>
+              )}
+            </Form.Group>
+          </Col>
+        </Row>
 
-        {/* Bathrooms */}
-        <Form.Group controlId="bathrooms">
-          <Form.Label>Bathrooms</Form.Label>
-          <InputGroup>
-            <Form.Control
-              type="number"
-              name="bathrooms"
-              value={formData.bathrooms}
-              onChange={handleChange}
-              isInvalid={!!errors.bathrooms}
-              disabled={disabled}
-            />
-            <InputGroup.Text>
-              <FaBath />
-            </InputGroup.Text>
-          </InputGroup>
-          {errors.bathrooms && (
-            <Form.Control.Feedback type="invalid" className="d-block">
-              {errors.bathrooms}
-            </Form.Control.Feedback>
-          )}
-        </Form.Group>
+        <Row>
+          {/* Bathrooms */}
+          <Col md={6} sm={12}>
+            <Form.Group controlId="bathrooms" className="mb-3">
+              <Form.Label>Bathrooms</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type="number"
+                  name="bathrooms"
+                  value={formData.bathrooms}
+                  onChange={handleChange}
+                  isInvalid={!!errors.bathrooms}
+                  disabled={disabled}
+                />
+                <InputGroup.Text>
+                  <FaBath />
+                </InputGroup.Text>
+              </InputGroup>
+              {errors.bathrooms && (
+                <Form.Control.Feedback type="invalid" className="d-block">
+                  {errors.bathrooms}
+                </Form.Control.Feedback>
+              )}
+            </Form.Group>
+          </Col>
 
-        {/* Location */}
-        <Form.Group controlId="location">
-          <Form.Label>Location</Form.Label>
-          <Form.Control
-            as="select"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-            isInvalid={!!errors.location}
-            disabled={disabled}
-          >
-            <option value="">Select Location</option>
-            <option value="1">Downtown</option>
-            <option value="2">Suburban</option>
-            <option value="3">Rural</option>
-          </Form.Control>
-          <Form.Control.Feedback type="invalid">
-            {errors.location}
-          </Form.Control.Feedback>
-        </Form.Group>
+          {/* Location */}
+          <Col md={6} sm={12}>
+            <Form.Group controlId="location" className="mb-3">
+              <Form.Label>Location</Form.Label>
+              <Form.Control
+                as="select"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                isInvalid={!!errors.location}
+                disabled={disabled}
+              >
+                <option value="">Select Location</option>
+                <option value="1">Downtown</option>
+                <option value="2">Suburban</option>
+                <option value="3">Rural</option>
+              </Form.Control>
+              {errors.location && (
+                <Form.Control.Feedback type="invalid" className="d-block">
+                  {errors.location}
+                </Form.Control.Feedback>
+              )}
+            </Form.Group>
+          </Col>
+        </Row>
 
-        {/* Age of Property */}
-        <Form.Group controlId="age">
-          <Form.Label>Age of Property</Form.Label>
-          <InputGroup>
-            <Form.Control
-              type="number"
-              name="age"
-              value={formData.age}
-              onChange={handleChange}
-              isInvalid={!!errors.age}
-              disabled={disabled}
-            />
-            <InputGroup.Text>
-              <FaCalendarAlt />
-            </InputGroup.Text>
-          </InputGroup>
-          {errors.age && (
-            <Form.Control.Feedback type="invalid" className="d-block">
-              {errors.age}
-            </Form.Control.Feedback>
-          )}
-        </Form.Group>
+        <Row>
+          {/* Age of Property */}
+          <Col md={6} sm={12}>
+            <Form.Group controlId="age" className="mb-3">
+              <Form.Label>Age of Property</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type="number"
+                  name="age"
+                  value={formData.age}
+                  onChange={handleChange}
+                  isInvalid={!!errors.age}
+                  disabled={disabled}
+                />
+                <InputGroup.Text>
+                  <FaCalendarAlt />
+                </InputGroup.Text>
+              </InputGroup>
+              {errors.age && (
+                <Form.Control.Feedback type="invalid" className="d-block">
+                  {errors.age}
+                </Form.Control.Feedback>
+              )}
+            </Form.Group>
+          </Col>
+        </Row>
 
         {/* Submit Button */}
-        <Button
-          variant="primary"
-          type="submit"
-          className="d-block mx-auto w-30 mt-3"
-          disabled={disabled}
-        >
-          Predict Price
-        </Button>
+        <Row className="justify-content-center">
+          <Col md={6} sm={12} className="text-center">
+            <Button
+              variant="primary"
+              type="submit"
+              className="w-100 mt-3"
+              disabled={disabled}
+            >
+              Predict Price
+            </Button>
+          </Col>
+        </Row>
       </Form>
     </div>
   );
