@@ -10,6 +10,7 @@ import dataset from "./dataset.json";
 import Home from "./components/Home/Home";
 import Navbar from "./components/Navigation/Navbar";
 import "./App.css";
+import Footer from "./components/Footer/Footer";
 
 const App = () => {
   const [net, setNet] = useState(null);
@@ -123,27 +124,9 @@ const App = () => {
 
         <PropertyForm
           onPredict={handlePrediction}
+          predictedPrice={predictedPrice}
           disabled={isModelLoading || !!error}
         />
-
-        {predictedPrice !== null && (
-          <div
-            className="predicted-price mt-3"
-            style={{ border: "2px solid green" }}
-          >
-            <p style={{ margin: 0 }}>
-              Predicted Price:{" "}
-              <strong>
-                {new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }).format(predictedPrice * 1000000)}
-              </strong>
-            </p>
-          </div>
-        )}
 
         <div className="mt-4 text-center">
           <button onClick={handleSaveModel} className="btn btn-success mx-2">
@@ -160,6 +143,7 @@ const App = () => {
           <PriceChart dataset={datasetWithPredictions} />
         </div>
       )}
+      <Footer />
     </div>
   );
 };
