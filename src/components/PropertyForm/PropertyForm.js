@@ -1,16 +1,10 @@
 import React, { useState } from "react";
 import { Form, Button, InputGroup, Col, Row } from "react-bootstrap";
-import {
-  FaHome,
-  FaBed,
-  FaBath,
-  FaMapMarkerAlt,
-  FaCalendarAlt,
-} from "react-icons/fa";
+import { FaHome, FaBed, FaBath, FaCalendarAlt } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./PropertyForm.css";
 
-const PropertyForm = ({ onPredict, disabled }) => {
+const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
   const [formData, setFormData] = useState({
     area: "",
     bedrooms: "",
@@ -20,6 +14,10 @@ const PropertyForm = ({ onPredict, disabled }) => {
   });
 
   const [errors, setErrors] = useState({});
+  const [predictionError, setPredictionError] = useState(null); // Track prediction errors
+  const [feedbackComment, setFeedbackComment] = useState(""); // Optional comment
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false); // Track if feedback is submitted
+  const [isAccurate, setIsAccurate] = useState(null); // Track if the prediction was accurate
 
   const minMaxValues = {
     area: { min: 500, max: 5000 },
@@ -91,41 +89,63 @@ const PropertyForm = ({ onPredict, disabled }) => {
     setErrors({ ...errors, [name]: "" });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setPredictionError(null); // Clear previous errors
+
     if (!validateInputs()) {
+      setPredictionError(
+        "Please fix the errors in the form before submitting."
+      );
       return;
     }
 
-    const normalizedInput = {
-      area: normalize(
-        parseFloat(formData.area),
-        minMaxValues.area.min,
-        minMaxValues.area.max
-      ),
-      bedrooms: normalize(
-        parseFloat(formData.bedrooms),
-        minMaxValues.bedrooms.min,
-        minMaxValues.bedrooms.max
-      ),
-      bathrooms: normalize(
-        parseFloat(formData.bathrooms),
-        minMaxValues.bathrooms.min,
-        minMaxValues.bathrooms.max
-      ),
-      location: normalize(
-        parseInt(formData.location, 10),
-        minMaxValues.location.min,
-        minMaxValues.location.max
-      ),
-      age: normalize(
-        parseFloat(formData.age),
-        minMaxValues.age.min,
-        minMaxValues.age.max
-      ),
-    };
+    try {
+      const normalizedInput = {
+        area: normalize(
+          parseFloat(formData.area),
+          minMaxValues.area.min,
+          minMaxValues.area.max
+        ),
+        bedrooms: normalize(
+          parseFloat(formData.bedrooms),
+          minMaxValues.bedrooms.min,
+          minMaxValues.bedrooms.max
+        ),
+        bathrooms: normalize(
+          parseFloat(formData.bathrooms),
+          minMaxValues.bathrooms.min,
+          minMaxValues.bathrooms.max
+        ),
+        location: normalize(
+          parseInt(formData.location, 10),
+          minMaxValues.location.min,
+          minMaxValues.location.max
+        ),
+        age: normalize(
+          parseFloat(formData.age),
+          minMaxValues.age.min,
+          minMaxValues.age.max
+        ),
+      };
 
-    onPredict(normalizedInput);
+      await onPredict(normalizedInput); // Call onPredict once
+    } catch (err) {
+      console.error("Prediction failed:", err);
+      setPredictionError("Failed to make a prediction. Please try again.");
+    }
+  };
+
+  const handleFeedback = (isAccurate) => {
+    setIsAccurate(isAccurate); // Store the user's selection
+    setFeedbackSubmitted(true); // Mark feedback as submitted
+
+    // You can send this feedback to your backend for analysis
+    console.log("User Feedback:", {
+      prediction: formData,
+      feedback: isAccurate ? "accurate" : "inaccurate",
+      comment: feedbackComment,
+    });
   };
 
   return (
@@ -277,6 +297,47 @@ const PropertyForm = ({ onPredict, disabled }) => {
           </Col>
         </Row>
       </Form>
+
+      {/* User Feedback Section */}
+      {predictedPrice !== null && (
+        <div className="mt-4">
+          <h4>Was the prediction accurate?</h4>
+          <Button
+            variant="success"
+            className="me-2"
+            onClick={() => handleFeedback(true)}
+          >
+            👍 Yes
+          </Button>
+          <Button
+            variant="danger"
+            className="me-2"
+            onClick={() => handleFeedback(false)}
+          >
+            👎 No
+          </Button>
+          {/* Feedback Submitted Message */}
+          {feedbackSubmitted && (
+            <div className="mt-3">
+              {isAccurate ? (
+                <p className="text-success">Thank you for your feedback!</p>
+              ) : (
+                <p className="text-danger">
+                  Sorry, we are working on improving our predictions. Thank you
+                  for your feedback!
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Error Message */}
+      {predictionError && (
+        <div className="alert alert-danger mt-3" role="alert">
+          {predictionError}
+        </div>
+      )}
     </div>
   );
 };
