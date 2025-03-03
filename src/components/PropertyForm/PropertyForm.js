@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, InputGroup, Col, Row } from "react-bootstrap";
 import { FaHome, FaBed, FaBath, FaCalendarAlt } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,10 +14,8 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
   });
 
   const [errors, setErrors] = useState({});
-  const [predictionError, setPredictionError] = useState(null); // Track prediction errors
-  const [feedbackComment, setFeedbackComment] = useState(""); // Optional comment
-  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false); // Track if feedback is submitted
-  const [isAccurate, setIsAccurate] = useState(null); // Track if the prediction was accurate
+  const [predictionError, setPredictionError] = useState(null);
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(null);
 
   const minMaxValues = {
     area: { min: 500, max: 5000 },
@@ -26,6 +24,12 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
     location: { min: 1, max: 3 },
     age: { min: 0, max: 100 },
   };
+
+  useEffect(() => {
+    if (predictedPrice !== null) {
+      setFeedbackSubmitted(null);
+    }
+  }, [predictedPrice]);
 
   const normalize = (value, min, max) => {
     return (value - min) / (max - min);
@@ -91,61 +95,20 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setPredictionError(null); // Clear previous errors
-
+    setPredictionError(null);
     if (!validateInputs()) {
       setPredictionError(
         "Please fix the errors in the form before submitting."
       );
       return;
     }
-
     try {
-      const normalizedInput = {
-        area: normalize(
-          parseFloat(formData.area),
-          minMaxValues.area.min,
-          minMaxValues.area.max
-        ),
-        bedrooms: normalize(
-          parseFloat(formData.bedrooms),
-          minMaxValues.bedrooms.min,
-          minMaxValues.bedrooms.max
-        ),
-        bathrooms: normalize(
-          parseFloat(formData.bathrooms),
-          minMaxValues.bathrooms.min,
-          minMaxValues.bathrooms.max
-        ),
-        location: normalize(
-          parseInt(formData.location, 10),
-          minMaxValues.location.min,
-          minMaxValues.location.max
-        ),
-        age: normalize(
-          parseFloat(formData.age),
-          minMaxValues.age.min,
-          minMaxValues.age.max
-        ),
-      };
-
-      await onPredict(normalizedInput); // Call onPredict once
+      await onPredict(formData);
+      setFeedbackSubmitted(null);
     } catch (err) {
       console.error("Prediction failed:", err);
       setPredictionError("Failed to make a prediction. Please try again.");
     }
-  };
-
-  const handleFeedback = (isAccurate) => {
-    setIsAccurate(isAccurate); // Store the user's selection
-    setFeedbackSubmitted(true); // Mark feedback as submitted
-
-    // You can send this feedback to your backend for analysis
-    console.log("User Feedback:", {
-      prediction: formData,
-      feedback: isAccurate ? "accurate" : "inaccurate",
-      comment: feedbackComment,
-    });
   };
 
   return (
@@ -153,9 +116,8 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
       <h1 className="property-form-title">Property Price Predictor</h1>
       <Form onSubmit={handleSubmit}>
         <Row>
-          {/* Area */}
-          <Col md={6} sm={12}>
-            <Form.Group controlId="area" className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="area">
               <Form.Label>Area (sq ft)</Form.Label>
               <InputGroup>
                 <Form.Control
@@ -177,10 +139,8 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
               )}
             </Form.Group>
           </Col>
-
-          {/* Bedrooms */}
-          <Col md={6} sm={12}>
-            <Form.Group controlId="bedrooms" className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="bedrooms">
               <Form.Label>Bedrooms</Form.Label>
               <InputGroup>
                 <Form.Control
@@ -203,11 +163,9 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
             </Form.Group>
           </Col>
         </Row>
-
         <Row>
-          {/* Bathrooms */}
-          <Col md={6} sm={12}>
-            <Form.Group controlId="bathrooms" className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="bathrooms">
               <Form.Label>Bathrooms</Form.Label>
               <InputGroup>
                 <Form.Control
@@ -229,10 +187,8 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
               )}
             </Form.Group>
           </Col>
-
-          {/* Location */}
-          <Col md={6} sm={12}>
-            <Form.Group controlId="location" className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="location">
               <Form.Label>Location</Form.Label>
               <Form.Control
                 as="select"
@@ -255,11 +211,9 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
             </Form.Group>
           </Col>
         </Row>
-
         <Row>
-          {/* Age of Property */}
-          <Col md={6} sm={12}>
-            <Form.Group controlId="age" className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="age">
               <Form.Label>Age of Property</Form.Label>
               <InputGroup>
                 <Form.Control
@@ -282,8 +236,6 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
             </Form.Group>
           </Col>
         </Row>
-
-        {/* Submit Button */}
         <Row className="justify-content-center">
           <Col md={6} sm={12} className="text-center">
             <Button
@@ -297,29 +249,40 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
           </Col>
         </Row>
       </Form>
-
-      {/* User Feedback Section */}
+      {predictedPrice !== null && (
+        <div
+          className="predicted-price mt-3"
+          style={{ border: "2px solid green" }}
+        >
+          <p style={{ margin: 0 }}>
+            Predicted Price:{" "}
+            <strong>
+              {new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(predictedPrice * 1000000)}
+            </strong>
+          </p>
+        </div>
+      )}
       {predictedPrice !== null && (
         <div className="mt-4">
           <h4>Was the prediction accurate?</h4>
           <Button
             variant="success"
             className="me-2"
-            onClick={() => handleFeedback(true)}
+            onClick={() => setFeedbackSubmitted("yes")}
           >
             👍 Yes
           </Button>
-          <Button
-            variant="danger"
-            className="me-2"
-            onClick={() => handleFeedback(false)}
-          >
+          <Button variant="danger" onClick={() => setFeedbackSubmitted("no")}>
             👎 No
           </Button>
-          {/* Feedback Submitted Message */}
           {feedbackSubmitted && (
             <div className="mt-3">
-              {isAccurate ? (
+              {feedbackSubmitted === "yes" ? (
                 <p className="text-success">Thank you for your feedback!</p>
               ) : (
                 <p className="text-danger">
