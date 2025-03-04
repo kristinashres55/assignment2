@@ -259,7 +259,7 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
             <Button
               variant="primary"
               type="submit"
-              className="w-100 mt-3"
+              className="w-50 mt-3"
               disabled={disabled}
             >
               Predict Price

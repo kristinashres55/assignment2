@@ -37,7 +37,7 @@
   }
 }
 .container {
-  width: 80%;
+  width: 50%;
   margin-left: auto;
   margin-right: auto;
   padding: 1rem;
@@ -61,7 +61,7 @@
 
 .price-chart-container {
   margin-top: 16px;
-  width: 80%;
+  width: 50%;
   margin-left: auto;
   margin-right: auto;
 }
