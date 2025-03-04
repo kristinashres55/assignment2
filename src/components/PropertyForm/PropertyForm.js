@@ -14,11 +14,10 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
   });
 
   const [errors, setErrors] = useState({});
-  const [predictionError, setPredictionError] = useState(null);
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(null);
 
   const minMaxValues = {
-    area: { min: 500, max: 5000 },
+    area: { min: 500, max: 6000 },
     bedrooms: { min: 1, max: 5 },
     bathrooms: { min: 1, max: 4 },
     location: { min: 1, max: 3 },
@@ -93,22 +92,41 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
     setErrors({ ...errors, [name]: "" });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setPredictionError(null);
     if (!validateInputs()) {
-      setPredictionError(
-        "Please fix the errors in the form before submitting."
-      );
       return;
     }
-    try {
-      await onPredict(formData);
-      setFeedbackSubmitted(null);
-    } catch (err) {
-      console.error("Prediction failed:", err);
-      setPredictionError("Failed to make a prediction. Please try again.");
-    }
+
+    const normalizedInput = {
+      area: normalize(
+        parseFloat(formData.area),
+        minMaxValues.area.min,
+        minMaxValues.area.max
+      ),
+      bedrooms: normalize(
+        parseFloat(formData.bedrooms),
+        minMaxValues.bedrooms.min,
+        minMaxValues.bedrooms.max
+      ),
+      bathrooms: normalize(
+        parseFloat(formData.bathrooms),
+        minMaxValues.bathrooms.min,
+        minMaxValues.bathrooms.max
+      ),
+      location: normalize(
+        parseInt(formData.location, 10),
+        minMaxValues.location.min,
+        minMaxValues.location.max
+      ),
+      age: normalize(
+        parseFloat(formData.age),
+        minMaxValues.age.min,
+        minMaxValues.age.max
+      ),
+    };
+
+    onPredict(normalizedInput);
   };
 
   return (
@@ -116,8 +134,8 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
       <h1 className="property-form-title">Property Price Predictor</h1>
       <Form onSubmit={handleSubmit}>
         <Row>
-          <Col md={6}>
-            <Form.Group controlId="area">
+          <Col md={6} sm={12}>
+            <Form.Group controlId="area" className="mb-3">
               <Form.Label>Area (sq ft)</Form.Label>
               <InputGroup>
                 <Form.Control
@@ -139,8 +157,8 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
               )}
             </Form.Group>
           </Col>
-          <Col md={6}>
-            <Form.Group controlId="bedrooms">
+          <Col md={6} sm={12}>
+            <Form.Group controlId="bedrooms" className="mb-3">
               <Form.Label>Bedrooms</Form.Label>
               <InputGroup>
                 <Form.Control
@@ -164,8 +182,8 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
           </Col>
         </Row>
         <Row>
-          <Col md={6}>
-            <Form.Group controlId="bathrooms">
+          <Col md={6} sm={12}>
+            <Form.Group controlId="bathrooms" className="mb-3">
               <Form.Label>Bathrooms</Form.Label>
               <InputGroup>
                 <Form.Control
@@ -187,8 +205,8 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
               )}
             </Form.Group>
           </Col>
-          <Col md={6}>
-            <Form.Group controlId="location">
+          <Col md={6} sm={12}>
+            <Form.Group controlId="location" className="mb-3">
               <Form.Label>Location</Form.Label>
               <Form.Control
                 as="select"
@@ -212,8 +230,8 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
           </Col>
         </Row>
         <Row>
-          <Col md={6}>
-            <Form.Group controlId="age">
+          <Col md={6} sm={12}>
+            <Form.Group controlId="age" className="mb-3">
               <Form.Label>Age of Property</Form.Label>
               <InputGroup>
                 <Form.Control
@@ -292,13 +310,6 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
               )}
             </div>
           )}
-        </div>
-      )}
-
-      {/* Error Message */}
-      {predictionError && (
-        <div className="alert alert-danger mt-3" role="alert">
-          {predictionError}
         </div>
       )}
     </div>
