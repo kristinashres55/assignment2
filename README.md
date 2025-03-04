@@ -2,7 +2,7 @@
 
 ## 📌 Project Overview
 
-The **Property Price Prediction App** leverages a neural network model (powered by `brain.js`) to predict property prices based on key features such as area, number of bedrooms and bathrooms, location, and age. It includes interactive data visualizations for comparing predicted and actual prices and analyzing feature importance.
+The **Property Price Prediction App** uses a neural network model (powered by `brain.js`) to predict property prices based on key features such as area, number of bedrooms and bathrooms, location, and age. It includes interactive data visualizations for comparing predicted and actual prices and analyzing feature importance.
 
 ## ✨ Key Features
 
