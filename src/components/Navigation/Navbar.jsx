@@ -5,6 +5,7 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="logo">
+        <img src="/favicon.jpg" alt="logo" />
         <h1>Real Estate</h1>
       </div>
       <div className="nav-menu">
