@@ -2,7 +2,7 @@
 
 ## 📌 Project Overview
 
-The **Property Price Prediction App** leverages a neural network model (powered by `brain.js`) to predict property prices based on key features such as area, number of bedrooms and bathrooms, location, and age. It includes interactive data visualizations for comparing predicted and actual prices and analyzing feature importance.
+The **Property Price Prediction App** uses a neural network model (powered by `brain.js`) to predict property prices based on key features such as area, number of bedrooms and bathrooms, location, and age. It includes interactive data visualizations for comparing predicted and actual prices and analyzing feature importance.
 
 ## ✨ Key Features
 
@@ -56,42 +56,13 @@ The **Property Price Prediction App** leverages a neural network model (powered 
    - Enter property details (area, bedrooms, bathrooms, location, age).
    - Click **"Predict Price"** to get an estimated price.
 
-## 📂 Folder Structure
-
-```
-ASSIGNMENT2/
-│── build/                  # Production build files
-│── node_modules/           # Dependencies (auto-generated)
-│── public/                 # Static assets (favicon, index.html, etc.)
-│── src/                    # Source code
-│   ├── assets/             # Images and other assets
-│   ├── components/         # Reusable React components
-│   ├── App.js              # Main application component
-│   ├── App.css             # Global styles
-│   ├── App.test.js         # Test file for App.js
-│   ├── createDataset.json  # Dataset creation file
-│   ├── dataset.json        # Sample dataset
-│   ├── index.css           # Additional styles
-│   ├── index.js            # Entry point of the app
-│   ├── logo.svg            # Application logo
-│   ├── reportWebVitals.js  # Performance measuring tool
-│   ├── setupTests.js       # Test setup file
-│── .gitignore              # Files to ignore in Git
-│── netlify.toml            # Netlify deployment configuration
-│── package-lock.json       # Lock file for dependencies
-│── package.json            # Project metadata and dependencies
-│── README.md               # Project documentation
-│── transformDataset.js     # Data transformation script
-
-```
-
 ## 🛠️ Technologies Used
 
 ### 🔹 Frontend
 
 - **React.js** (component-based UI development)
 - **Chart.js** (data visualization)
-- **Tailwind CSS** (modern and responsive styling)
+- **Bootstrap CSS** (modern and responsive styling)
 
 ### 🔹 Machine Learning
 
@@ -100,15 +71,6 @@ ASSIGNMENT2/
 ### 🔹 Build Tool
 
 - **Netlify** (optimized development and production builds)
-
-## 📩 Contact
-
-For questions or feedback, feel free to reach out:
-
-- **Email**: kristinashrestha2055@gmail.com
-- **GitHub**: [kristinashres55](https://github.com/kristinashres55)
-
----
 
 ### Conclusion
 
