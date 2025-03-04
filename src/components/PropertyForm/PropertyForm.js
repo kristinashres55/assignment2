@@ -287,7 +287,7 @@ const PropertyForm = ({ onPredict, disabled, predictedPrice }) => {
       )}
       {predictedPrice !== null && (
         <div className="mt-4">
-          <h4>Was the prediction accurate?</h4>
+          <h4 className="feedback-title">Was the prediction accurate?</h4>
           <Button
             variant="success"
             className="me-2"
